@@ -17,23 +17,19 @@ You need to deploy ecs-registry, in order to be able to push images *to* the reg
 
 Deployment process, in general:
 
-Run ecs-registry CF template, with name and user to grant push/pull permissions. (This would normally be a jenkins user):
-`aws cloudformation deploy --template-file ./ecs-registry.yaml --stack-name example-ecr --parameter-overrides ECRName=example-service ECRRole=$USER_ARN`
-Get the URI for the ECR. If you have jq handy, you can do something like:
-`aws ecr describe-repositories --repository-names example-service | jq '.repositories[0].repositoryUri'`
-Get the login token for docker, then paste it in. (You can use --password-stdin and then paste the password in seperately if desired, on multi-user systems.)
+* Run ecs-registry CF template, with name and user to grant push/pull permissions. (This would normally be a jenkins user): `aws cloudformation deploy --template-file ./ecs-registry.yaml --stack-name example-ecr --parameter-overrides ECRName=example-service ECRRole=$USER_ARN`
+* Get the URI for the ECR. If you have jq handy, you can do something like: `aws ecr describe-repositories --repository-names example-service | jq '.repositories[0].repositoryUri'`
+* Get the login token for docker, then paste it in. (You can use --password-stdin and then paste the password in seperately if desired, on multi-user systems.)
 `aws ecr get-login --no-include-email`
 
-Then build and push the docker image:
+* Then build and push the docker image:
 ```
 docker build -t example-service ./app
 docker tag test-registry:latest $REPO_URI:latest
 docker push $REPO_URI:latest
 ```
 
-Now you can actually do the rest of the stack.
-First, upload all the templates here to S3.
-(I'm using abyss-citrusbyte-opstest-zach/example-app as $bucket)
+* Now you can actually do the rest of the stack. First, upload all the templates here to S3.
 ```
 aws s3 mb s3://$bucket
 aws s3 cp master.yaml s3://$bucket/master.yaml
@@ -53,9 +49,9 @@ To update (Say, with an updated docker image), just modify the CF stack with the
 
 ### Example Sinatra App endpoints ###
 **GET**
-/status is the internal health-check. You can't hit it via ALB, which is mostly my paranoia from having developers put protected information in status pages, historically.
-/example/ is the general hello world page
-/example/status.json returns json
+- /status is the internal health-check. You can't hit it via ALB, which is mostly my paranoia from having developers put protected information in status pages, historically.
+- /example/ is the general hello world page
+- /example/status.json returns json
 
 ### Stuff I'm not happy with ###
 
