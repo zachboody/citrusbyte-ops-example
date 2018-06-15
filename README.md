@@ -51,6 +51,12 @@ Note being, you'll need to add `--capabilities CAPABILITY_NAMED_IAM` in the CLI 
 
 To update (Say, with an updated docker image), just modify the CF stack with the new image parameter and update.
 
+### Example Sinatra App endpoints ###
+**GET**
+/status is the internal health-check. You can't hit it via ALB, which is mostly my paranoia from having developers put protected information in status pages, historically.
+/example/ is the general hello world page
+/example/status.json returns json
+
 ### Stuff I'm not happy with ###
 
 - No way that I could find to dump out the URI for the ECR from cloud formation.
@@ -61,8 +67,19 @@ To update (Say, with an updated docker image), just modify the CF stack with the
 
 ### Some fun bugs ###
 - Mostly, the saga of "I didn't check all the URLs", and with the nested templates, that caused me some headache.
-- I missed that the URLs didn't get rewritten
+- When you switch from a "classic" sinatra app to a modular one, you do actually need to mount the new app class. Whoops.
 
-### Stuff I'd modify for "production-ready"
+### Stuff I'd modify for "production-ready" ###
 
 - Jenkins. There's definitely some scope for leaving the prod repository on :latest and just using Jenkins to poke it whenever a new commit is merged to master, with a new image.
+
+### Fun ideas I couldn't make work in scope ###
+- Swagger to generate your services would be really entertaining, but I couldn't make it work elegantly in a "Push button, recieve stack" sense.
+- Shell scripts for standing up the stack the first time. (Setting up the repository, initial docker setup). This was mostly time.
+- Auto-adapting the mount point for the Sinatra app. (I.E, you could write code to respond on / and it'd work if it was mounted on example/ or api/, etc.)
+- Automated Let's Encrypt for SSL
+
+### Some personal notes ###
+For the record, standing up a new workstation for AWS devops work, on a 12+ year old laptop with no battery, on unreliable wifi and power, under several time constraints is... an experience. I'm not super happy with the results, but I am happy with what I managed under constraints.
+
+This (An ECS stack from the ground up) is also going on The List of things to write an eventual article about. I have a fair few developer friends that could use similar for side projects and save themselves some trouble.

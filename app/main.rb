@@ -12,6 +12,7 @@ class SimpleApp < Sinatra::Base
         'OK'
     end
 
-    get '/example/hello' do
+    get '/example' do
         'Example application'
     end
+end
