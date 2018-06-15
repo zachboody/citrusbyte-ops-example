@@ -56,7 +56,7 @@ Resources:
             TaskDefinition: !Ref TaskDefinition
             LoadBalancers: 
                 - ContainerName: "example-service"
-                  ContainerPort: 8000
+                  ContainerPort: 9292
                   TargetGroupArn: !Ref TargetGroup
 
     TaskDefinition:
@@ -72,7 +72,7 @@ Resources:
                     - Name: PRODUCT_SERVICE_URL
                       Value: !Ref ProductServiceUrl
                   PortMappings:
-                    - ContainerPort: 8000
+                    - ContainerPort: 9292
                   LogConfiguration:
                     LogDriver: awslogs
                     Options:
@@ -94,7 +94,7 @@ Resources:
             Matcher: 
                 HttpCode: 200-299
             HealthCheckIntervalSeconds: 10
-            HealthCheckPath: /
+            HealthCheckPath: /status
             HealthCheckProtocol: HTTP
             HealthCheckTimeoutSeconds: 5
             HealthyThresholdCount: 2
@@ -144,7 +144,10 @@ Resources:
                                     "elasticloadbalancing:DeregisterTargets",
                                     "elasticloadbalancing:DescribeTargetGroups",
                                     "elasticloadbalancing:DescribeTargetHealth",
-                                    "elasticloadbalancing:RegisterTargets"
+                                    "elasticloadbalancing:RegisterTargets",
+                                    "ecr:GetDownloadUrlForLayer",
+                                    "ecr:BatchGetImage",
+                                    "ecr:BatchCheckLayerAvailability"
                                 ],
                                 "Resource": "*"
                         }]

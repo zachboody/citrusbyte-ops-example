@@ -68,7 +68,7 @@ Resources:
     ExampleService:
         Type: AWS::CloudFormation::Stack
         Properties:
-            TemplateURL: https://s3-us-west-2.amazonaws.com/abyss-citrusbyte-opstest-zach/example-service/services/product-service/service.yaml
+            TemplateURL: https://s3-us-west-2.amazonaws.com/abyss-citrusbyte-opstest-zach/example-service/services/example-service/service.yaml
             Parameters:
                 VPC: !GetAtt VPC.Outputs.VPC
                 Cluster: !GetAtt ECS.Outputs.Cluster
@@ -76,6 +76,8 @@ Resources:
                 Listener: !GetAtt ALB.Outputs.Listener 
                 ImageID: !Ref ExampleServiceImageID
                 Path: /example
+                ProductServiceUrl: !Join [ "/", [ !GetAtt ALB.Outputs.LoadBalancerUrl, "example" ]]
+                ECSServiceAutoScalingRoleARN: !GetAtt ECS.Outputs.ECSServiceAutoScalingRole
 
     LifecycleHook:
         Type: AWS::CloudFormation::Stack
@@ -89,4 +91,4 @@ Outputs:
 
     ExampleServiceUrl: 
         Description: The URL endpoint for the example service
-        Value: !Join [ "/", [ !GetAtt ALB.Outputs.LoadBalancerUrl, "products" ]]
+        Value: !Join [ "/", [ !GetAtt ALB.Outputs.LoadBalancerUrl, "example" ]]

@@ -1,16 +1,17 @@
-require 'sinatra'
+require 'sinatra/base'
 require 'json'
 
+class SimpleApp < Sinatra::Base
 
-get '/status.json' do
-    content_type :json
-    { :status => 'OK'}.to_json
-end
+    get '/example/status.json' do
+        content_type :json
+        { :status => 'OK'}.to_json
+    end
 
-get '/status' do
-    'OK'
-end
+    get '/status' do
+        'OK'
+    end
 
-get '/' do
-    'Example application'
-end
+    get '/example/hello' do
+        'Example application'
+    end

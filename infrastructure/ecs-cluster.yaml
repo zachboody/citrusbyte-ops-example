@@ -139,7 +139,7 @@ Resources:
                             command: !Sub echo ECS_CLUSTER=${ECSCluster} >> /etc/ecs/ecs.config
                     files:
                         "/etc/cfn/cfn-hup.conf":
-                            mode: 000400
+                            mode: "000400"
                             owner: root
                             group: root
                             content: !Sub |
@@ -327,8 +327,6 @@ Resources:
                       - application-autoscaling:*
                       - cloudwatch:DescribeAlarms
                       - cloudwatch:PutMetricAlarm
-                      - ecs:DescribeServices
-                      - ecs:UpdateService
                       Resource: "*"
 
 Outputs:
