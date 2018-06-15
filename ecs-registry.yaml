@@ -1,0 +1,31 @@
+Description: >
+    This template deploys an ECS repository, and sets up the provided users with permissions.
+Parameters:
+  ECRName:
+    Type: 'String'
+    Description: The name of the ECR
+  ECRRole:
+    Type: 'String'
+    Description: The role to give push/pull permissions to the ECR.
+Resources:
+  AppRepository: 
+    Type: "AWS::ECR::Repository"
+    Properties: 
+      RepositoryName: !Ref ECRName
+      RepositoryPolicyText: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Sid: AllowPushPull
+            Effect: Allow
+            Principal: 
+              AWS: 
+                - !Ref ECRRole
+            Action: 
+              - "ecr:GetDownloadUrlForLayer"
+              - "ecr:BatchGetImage"
+              - "ecr:BatchCheckLayerAvailability"
+              - "ecr:PutImage"
+              - "ecr:InitiateLayerUpload"
+              - "ecr:UploadLayerPart"
+              - "ecr:CompleteLayerUpload"
