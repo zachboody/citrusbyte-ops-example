@@ -49,8 +49,9 @@ The important master parameters are
 
 Note being, you'll need to add `--capabilities CAPABILITY_NAMED_IAM` in the CLI (Or check the "I acknowlege AWS is going to create..." in the web frontend.)
 
-To update (Say, with an updated docker image), run the services/example-service/service.yaml CF template
-Stuff I'm not happy with:
+To update (Say, with an updated docker image), just modify the CF stack with the new image parameter and update.
+
+### Stuff I'm not happy with ###
 
 - No way that I could find to dump out the URI for the ECR from cloud formation.
 
@@ -58,3 +59,10 @@ Stuff I'm not happy with:
 
 - On a personal level, I don't really like how this is mostly "Slightly extended ecs-refarch-cloudformation", but the base is incredibly solid, to the point that I'd not feel better about doing the same thing, slightly worse, out of "Not invented here"
 
+### Some fun bugs ###
+- Mostly, the saga of "I didn't check all the URLs", and with the nested templates, that caused me some headache.
+- I missed that the URLs didn't get rewritten
+
+### Stuff I'd modify for "production-ready"
+
+- Jenkins. There's definitely some scope for leaving the prod repository on :latest and just using Jenkins to poke it whenever a new commit is merged to master, with a new image.
